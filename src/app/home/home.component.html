@@ -3,9 +3,23 @@
 
 <div class="px-5 mb-8">
   <h1 class="font-medium text-2xl">Home</h1>
-  <p data-testid="username" class="text-sm opacity-50">@{{ username }}</p>
+  <p data-testid="username" class="text-sm text-neutral-400">@{{ username }}</p>
 </div>
 
 <main>
-  <h2 class="px-5 text-lg opacity-50">Songs</h2>
+  <h2 class="px-5 text-lg text-neutral-400">Songs</h2>
+  <div class="flex flex-col gap-2 px-1">
+    <div
+      *ngFor="let song of songs"
+      class="py-3 px-4 hover:bg-neutral-800 rounded-xl flex gap-3"
+    >
+      <div class="h-12 w-12 overflow-hidden rounded shrink-0">
+        <img [src]="song.thumbnail" alt="" class="max-w-full aspect-square" />
+      </div>
+      <div class="flex-1">
+        <h3 class="text-lg">{{ song.name }}</h3>
+        <p class="text-sm text-neutral-400">{{ song.artist.name }}</p>
+      </div>
+    </div>
+  </div>
 </main>
