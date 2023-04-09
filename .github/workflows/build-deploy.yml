@@ -30,9 +30,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: 🏗️ Build
+      - name: 🏗️ Build & Test 🧪
         run: |
           npm ci
+          npm run test:ci
           npm run build -- --base-href /my-music-app/ --output-path dist
 
       - name: 🚀 Deploy
