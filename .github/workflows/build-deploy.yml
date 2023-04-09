@@ -1,0 +1,41 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Checkout
+        uses: actions/checkout@v3
+
+      - name: 🛠️ Setup environment
+        uses: actions/setup-node@v2.5.2
+        with:
+          path: ~/.npm
+          node-version: '16.x'
+
+      - name: 📦 Cache node_modules
+        uses: actions/cache@v2.1.8
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: 🏗️ Build
+        run: |
+          npm ci
+          npm run build -- --base-href /my-music-app/ --output-path dist
+
+      - name: 🚀 Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist
