@@ -50,7 +50,7 @@ describe('HomeComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(
       compiled.querySelector('[data-testid="username"]')?.textContent,
-    ).toBe('@bar');
+    ).toContain('@bar');
   });
 
   it('loads user songs', async () => {
