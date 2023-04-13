@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class UserService {
-  private _username: string = 'username';
+  private _username: string = '';
 
   username() {
     return this._username;

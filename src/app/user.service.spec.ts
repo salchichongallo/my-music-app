@@ -11,7 +11,7 @@ describe('UserService', () => {
   });
 
   it('changes the username', () => {
-    expect(service.username()).toBe('username');
+    expect(service.username()).toBe('');
     service.changeUsername('foo');
     expect(service.username()).toBe('foo');
   });

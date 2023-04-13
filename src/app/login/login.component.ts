@@ -1,5 +1,7 @@
+import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DummyAuthService } from '../auth/auth.service';
 
 export const MAX_USERNAME_LENGTH = 25;
 export const MAX_PASSWORD_LENGTH = 100;
@@ -13,6 +15,8 @@ export class LoginComponent implements OnInit {
     username: FormControl<string | null>;
     password: FormControl<string | null>;
   }> = null!;
+
+  constructor(private authService: DummyAuthService, private router: Router) {}
 
   ngOnInit() {
     this.initForm();
@@ -39,9 +43,11 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  // TODO: delegate authentication to a service
-  private attemptToLogin() {
+  private async attemptToLogin() {
+    const { username, password } = this.loginForm.value;
+    await this.authService.loginWithCredentials(username!, password!);
     this.loginForm.reset();
+    this.router.navigate(['']);
   }
 
   private invalidateForm() {

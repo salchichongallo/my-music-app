@@ -1,11 +1,25 @@
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
+import {
+  tick,
+  TestBed,
+  fakeAsync,
+  ComponentFixture,
+} from '@angular/core/testing';
+
+import { AuthService, DummyAuthService } from '../auth/auth.service';
 
 import {
   LoginComponent,
   MAX_PASSWORD_LENGTH,
   MAX_USERNAME_LENGTH,
 } from './login.component';
+
+class FakeAuthService implements AuthService {
+  async loginWithCredentials() {}
+  isAuth() {
+    return true;
+  }
+}
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
@@ -15,6 +29,7 @@ describe('LoginComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [LoginComponent],
       imports: [FormsModule, ReactiveFormsModule],
+      providers: [{ provide: DummyAuthService, useClass: FakeAuthService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoginComponent);
@@ -41,7 +56,7 @@ describe('LoginComponent', () => {
     expect(submit).not.toBeNull();
   });
 
-  it('should reset form after submit', () => {
+  it('should reset form after submit', fakeAsync(() => {
     component.loginForm.controls.username.setValue('foo');
     component.loginForm.controls.password.setValue('bar');
 
@@ -49,9 +64,11 @@ describe('LoginComponent', () => {
     expect(password()?.value).toBe('bar');
 
     submitForm();
+    fixture.detectChanges();
+    tick();
     expect(username()?.value).toBe('');
     expect(password()?.value).toBe('');
-  });
+  }));
 
   it('should render validation errors', fakeAsync(() => {
     const usernameError = () =>
